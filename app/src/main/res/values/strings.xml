@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Movier</string>
+    <string name="kinopoisk_standart_value">Кинопоиск: 8.6</string>
+    <string name="imdb_standart_value">IMDB: 7.8</string>
+    <string name="movie_overview_standart_value">В Англии Ньют Саламандер пытается вернуть себе право путешествовать, отнятое министерством магии после возвращения Ньюта из Нью-Йорка. Министерство требует, чтобы Ньют работал на него под началом своего брата Тесея, главы отдела мракоборцев, но Ньют отказывается, желая сохранить нейтралитет. Дамблдор просит Ньюта разыскать Криденса, утверждая, что его еще можно спасти и этим помешать Грин-де-Вальду</string>
+    <string name="like_button_standart_value">ПОНРАВИЛСЯ</string>
+    <string name="genre_standart_value">Жанр: Фэнтези, Комедия</string>
+    <string name="movie_year_standart_value">Год выпуска: 2019</string>
+    <string name="movie_title_standart_value">Фантастические твари: Преступления Грин-де-Вальда</string>
+</resources>
