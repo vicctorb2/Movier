@@ -6,7 +6,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class NetworkService {
 
     private static NetworkService ourInstance = new NetworkService();
-    private static final String BASE_API_URL = "https://jsonplaceholder.typicode.com";
+    private static final String BASE_API_URL = "https://api.themoviedb.org/3/movie/";
     private Retrofit mRetrofit;
     public static NetworkService getInstance() {
         if (ourInstance == null) {

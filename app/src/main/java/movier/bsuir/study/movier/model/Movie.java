@@ -8,19 +8,21 @@ public class Movie {
     private String genre;
     private String kinopoiskRating;
     private String imdbRating;
+    private String posterImgUrl;
     private int year;
 
 
     public Movie() {
     }
 
-    public Movie(String title, String rating, String overview, String genre, String kinopoiskRating, String imdbRating, int year) {
+    public Movie(String title, String rating, String overview, String genre, String kinopoiskRating, String imdbRating, String posterImgUrl, int year) {
         this.title = title;
         this.rating = rating;
         this.overview = overview;
         this.genre = genre;
         this.kinopoiskRating = kinopoiskRating;
         this.imdbRating = imdbRating;
+        this.posterImgUrl = posterImgUrl;
         this.year = year;
     }
 
@@ -70,6 +72,14 @@ public class Movie {
 
     public void setImdbRating(String imdbRating) {
         this.imdbRating = imdbRating;
+    }
+
+    public String getPosterImgUrl() {
+        return posterImgUrl;
+    }
+
+    public void setPosterImgUrl(String posterImgUrl) {
+        this.posterImgUrl = posterImgUrl;
     }
 
     public int getYear() {

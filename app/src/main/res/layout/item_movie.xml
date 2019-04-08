@@ -10,7 +10,7 @@
         android:layout_height="87dp">
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/item_movie_poster"
             android:layout_width="47dp"
             android:layout_height="73dp"
             android:layout_marginStart="16dp"
@@ -35,7 +35,7 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@+id/item_movie_rating"
             app:layout_constraintHorizontal_bias="0.03"
-            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintStart_toEndOf="@+id/item_movie_poster"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -67,7 +67,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/item_movie_rating"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/imageView" />
+            app:layout_constraintStart_toEndOf="@+id/item_movie_poster" />
 
         <TextView
             android:id="@+id/item_movie_genre"
@@ -83,7 +83,7 @@
             app:layout_constraintBottom_toTopOf="@+id/item_movie_year"
             app:layout_constraintEnd_toStartOf="@+id/item_movie_rating"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintStart_toEndOf="@+id/item_movie_poster"
             app:layout_constraintTop_toBottomOf="@+id/item_movie_title" />
 
     </android.support.constraint.ConstraintLayout>
