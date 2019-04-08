@@ -48,7 +48,7 @@ public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<MovieHolder>{
     public void onBindViewHolder(@NonNull MovieHolder movieHolder, final int position) {
         Picasso.with(mContext).load(moviesList.get(position).getPosterImgUrl()).placeholder(R.drawable.poster).into(movieHolder.itemMoviePosterImageView);
         movieHolder.itemMovieTitleTv.setText(moviesList.get(position).getTitle());
-        movieHolder.itemMoviegenreTv.setText(moviesList.get(position).getGenre());
+        movieHolder.itemMovieGenreTv.setText(moviesList.get(position).getGenre());
         movieHolder.itemMovieRatingTv.setText(moviesList.get(position).getRating());
         movieHolder.itemMovieYearTv.setText(moviesList.get(position).getYear());
         View.OnClickListener onClickListener = new View.OnClickListener() {

@@ -11,7 +11,7 @@ public class MovieHolder extends RecyclerView.ViewHolder {
 
     public ImageView itemMoviePosterImageView;
     public TextView itemMovieTitleTv;
-    public TextView itemMoviegenreTv;
+    public TextView itemMovieGenreTv;
     public TextView itemMovieYearTv;
     public TextView itemMovieRatingTv;
 
@@ -19,7 +19,7 @@ public class MovieHolder extends RecyclerView.ViewHolder {
     public MovieHolder(View itemView) {
         super(itemView);
         itemMovieTitleTv = itemView.findViewById(R.id.item_movie_title);
-        itemMoviegenreTv = itemView.findViewById(R.id.item_movie_genre);
+        itemMovieGenreTv = itemView.findViewById(R.id.item_movie_genre);
         itemMovieRatingTv = itemView.findViewById(R.id.item_movie_rating);
         itemMovieYearTv = itemView.findViewById(R.id.item_movie_year);
         itemMoviePosterImageView = itemView.findViewById(R.id.item_movie_poster);
