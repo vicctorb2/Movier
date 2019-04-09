@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,9 +18,16 @@ import java.util.List;
 import movier.bsuir.study.movier.R;
 import movier.bsuir.study.movier.adapter.MovieRecyclerViewAdapter;
 import movier.bsuir.study.movier.api.NetworkService;
+import movier.bsuir.study.movier.model.MoviListResponse;
 import movier.bsuir.study.movier.model.Movie;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MovieListFragment extends Fragment {
+
+
+    String access_token = "f43cdf4c9aec6de5430e5fab778e3855";
 
     View view;
     ListView moviesListView;
@@ -45,7 +53,36 @@ public class MovieListFragment extends Fragment {
     }
 
     private void loadMoviesList() {
+        apiService = NetworkService.getInstance();
 
+        Call<MoviListResponse> call = apiService.getUsers(authHeader, currentJsonResponsePage, usersPerPage);
+        call.enqueue(new Callback<GitHubUserResponse>() {
+            @Override
+            public void onResponse(Call<GitHubUserResponse> call, Response<GitHubUserResponse> response) {
+                try {
+                    if (response.isSuccessful() && response.code() != 403) {
+                        List<GitHubUser> responseItemsList = new ArrayList<>(response.body().getItems());
+                        gitHubUsersList.addAll(responseItemsList);
+                        recyclerView.setAdapter(recyclerViewAdapter);
+                        recyclerView.scrollToPosition(gitHubUsersList.size() - responseItemsList.size() - 1);
+                        //incrementing current json response page
+                        currentJsonResponsePage++;
+                        loading = false;
+                        progressBar.setVisibility(ProgressBar.INVISIBLE);
+                    }
+                } catch (NullPointerException ex) {
+                    ex.printStackTrace();
+                    recyclerView.setAdapter(recyclerViewAdapter);
+                    loading = false;
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<GitHubUserResponse> call, Throwable t) {
+                progressBar.setVisibility(ProgressBar.INVISIBLE);
+            }
+        });
     }
 
     private void initUI() {

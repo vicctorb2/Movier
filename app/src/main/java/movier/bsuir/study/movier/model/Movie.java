@@ -1,28 +1,56 @@
 package movier.bsuir.study.movier.model;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 public class Movie {
 
-    private String title;
-    private String rating;
-    private String overview;
-    private String genre;
-    private String kinopoiskRating;
-    private String imdbRating;
-    private String posterImgUrl;
-    private int year;
+    @SerializedName("id")
+    @Expose
+    private int id;
 
+    @SerializedName("title")
+    @Expose
+    private String title;
+
+    @SerializedName("vote_average")
+    @Expose
+    private String rating;
+
+    @SerializedName("overview")
+    @Expose
+    private String overview;
+
+    private String genre = "Жанр";
+    private String kinopoiskRating = "5.5";
+    private String imdbRating = "5.5";
+
+    @SerializedName("poster_path")
+    private String posterImgUrl;
+
+
+    private int year = 2019;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public Movie() {
     }
 
-    public Movie(String title, String rating, String overview, String genre, String kinopoiskRating, String imdbRating, String posterImgUrl, int year) {
+    public Movie(int id, String title, String rating, String overview, String genre, String kinopoiskRating, String imdbRating, String posterImgUrl, int year) {
+        this.id = id;
         this.title = title;
         this.rating = rating;
         this.overview = overview;
         this.genre = genre;
         this.kinopoiskRating = kinopoiskRating;
         this.imdbRating = imdbRating;
-        this.posterImgUrl = posterImgUrl;
+        this.posterImgUrl = "https://image.tmdb.org/t/p/original" + posterImgUrl;
         this.year = year;
     }
 
