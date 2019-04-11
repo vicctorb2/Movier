@@ -10,14 +10,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import movier.bsuir.study.movier.R;
 import movier.bsuir.study.movier.adapter.MovieRecyclerViewAdapter;
-import movier.bsuir.study.movier.api.NetworkService;
+import movier.bsuir.study.movier.api.Client;
+import movier.bsuir.study.movier.api.MovieApi;
+
 import movier.bsuir.study.movier.model.MoviListResponse;
 import movier.bsuir.study.movier.model.Movie;
 import retrofit2.Call;
@@ -34,7 +35,7 @@ public class MovieListFragment extends Fragment {
     protected static RecyclerView recyclerView;
     private static List<Movie> moviesList;
     protected static List<Movie> filteredMovieList;
-    static NetworkService apiService = NetworkService.getInstance();
+    static MovieApi apiService;
     private static int currentJsonResponsePage = 1;
     private static int usersPerPage = 50;
     static MovieRecyclerViewAdapter recyclerViewAdapter;
@@ -53,22 +54,21 @@ public class MovieListFragment extends Fragment {
     }
 
     private void loadMoviesList() {
-        apiService = NetworkService.getInstance();
+        apiService = Client.getClient().create(MovieApi.class);
 
-        Call<MoviListResponse> call = apiService.getUsers(authHeader, currentJsonResponsePage, usersPerPage);
-        call.enqueue(new Callback<GitHubUserResponse>() {
+        Call<MoviListResponse> call = apiService.getMoviesFromSearch(access_token,"Титаник");
+        call.enqueue(new Callback<MoviListResponse>() {
             @Override
-            public void onResponse(Call<GitHubUserResponse> call, Response<GitHubUserResponse> response) {
+            public void onResponse(Call<MoviListResponse> call, Response<MoviListResponse> response) {
                 try {
                     if (response.isSuccessful() && response.code() != 403) {
-                        List<GitHubUser> responseItemsList = new ArrayList<>(response.body().getItems());
-                        gitHubUsersList.addAll(responseItemsList);
+                        List<Movie> responseItemsList = new ArrayList<>(response.body().getMovieList());
+                        moviesList.addAll(responseItemsList);
                         recyclerView.setAdapter(recyclerViewAdapter);
-                        recyclerView.scrollToPosition(gitHubUsersList.size() - responseItemsList.size() - 1);
+                        recyclerView.scrollToPosition(moviesList.size() - responseItemsList.size() - 1);
                         //incrementing current json response page
                         currentJsonResponsePage++;
                         loading = false;
-                        progressBar.setVisibility(ProgressBar.INVISIBLE);
                     }
                 } catch (NullPointerException ex) {
                     ex.printStackTrace();
@@ -79,8 +79,8 @@ public class MovieListFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<GitHubUserResponse> call, Throwable t) {
-                progressBar.setVisibility(ProgressBar.INVISIBLE);
+            public void onFailure(Call<MoviListResponse> call, Throwable t) {
+                Toast.makeText(getActivity().getApplicationContext(),"Something wrong", Toast.LENGTH_LONG).show();
             }
         });
     }

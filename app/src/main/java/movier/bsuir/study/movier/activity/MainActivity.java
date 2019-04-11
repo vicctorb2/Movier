@@ -31,7 +31,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
         //tabs setting
         adapter.addFragment(new MovieListFragment(), "Movie list");
-        adapter.addFragment(new MovieListFragment(), "Other Tab");
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
         setSupportActionBar(toolbar);

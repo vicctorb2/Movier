@@ -26,6 +26,7 @@ public class Movie {
     private String imdbRating = "5.5";
 
     @SerializedName("poster_path")
+    @Expose
     private String posterImgUrl;
 
 
@@ -50,7 +51,7 @@ public class Movie {
         this.genre = genre;
         this.kinopoiskRating = kinopoiskRating;
         this.imdbRating = imdbRating;
-        this.posterImgUrl = "https://image.tmdb.org/t/p/original" + posterImgUrl;
+        this.posterImgUrl = posterImgUrl;
         this.year = year;
     }
 
@@ -107,7 +108,7 @@ public class Movie {
     }
 
     public void setPosterImgUrl(String posterImgUrl) {
-        this.posterImgUrl = posterImgUrl;
+        this.posterImgUrl = "https://image.tmdb.org/t/p/original" + posterImgUrl;
     }
 
     public int getYear() {
