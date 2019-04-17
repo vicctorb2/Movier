@@ -7,9 +7,7 @@ import android.support.v7.widget.SearchView;
 
 import movier.bsuir.study.movier.R;
 
-public class MovieDetailsActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
-
-    public SearchView searchView;
+public class MovieDetailsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -20,15 +18,5 @@ public class MovieDetailsActivity extends AppCompatActivity implements SearchVie
 
     private void initUI() {
 
-    }
-
-    @Override
-    public boolean onQueryTextSubmit(String s) {
-        return false;
-    }
-
-    @Override
-    public boolean onQueryTextChange(String s) {
-        return false;
     }
 }

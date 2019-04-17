@@ -104,11 +104,11 @@ public class Movie {
     }
 
     public String getPosterImgUrl() {
-        return posterImgUrl;
+        return "https://image.tmdb.org/t/p/original" + posterImgUrl;
     }
 
     public void setPosterImgUrl(String posterImgUrl) {
-        this.posterImgUrl = "https://image.tmdb.org/t/p/original" + posterImgUrl;
+        this.posterImgUrl = posterImgUrl;
     }
 
     public int getYear() {

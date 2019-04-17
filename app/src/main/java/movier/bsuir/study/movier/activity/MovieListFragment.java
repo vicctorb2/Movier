@@ -4,12 +4,15 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -25,38 +28,47 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MovieListFragment extends Fragment {
-
+public class MovieListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
 
     String access_token = "f43cdf4c9aec6de5430e5fab778e3855";
-
     View view;
-    ListView moviesListView;
+
     protected static RecyclerView recyclerView;
-    private static List<Movie> moviesList;
+    SwipeRefreshLayout swipeRefreshLayout;
+    public static List<Movie> moviesList;
     protected static List<Movie> filteredMovieList;
     static MovieApi apiService;
-    private static int currentJsonResponsePage = 1;
-    private static int usersPerPage = 50;
     static MovieRecyclerViewAdapter recyclerViewAdapter;
-    static MovieRecyclerViewAdapter filteredViewAdapter;
-
     static boolean loading;
+    ProgressBar progressBar;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable final ViewGroup container, Bundle savedInstanceState) {
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         view = inflater.inflate(R.layout.activity_movie_list, container, false);
-        initUI();
+        init();
         loadMoviesList();
         return view;
     }
 
+    private void init() {
+        progressBar = view.findViewById(R.id.progressBar);
+        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setOnRefreshListener(this);
+        moviesList = new ArrayList<>();
+        filteredMovieList = new ArrayList<>();
+        recyclerViewAdapter = new MovieRecyclerViewAdapter(getContext(), moviesList);
+        recyclerView = view.findViewById(R.id.movies_listview);
+        final LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(mLayoutManager);
+    }
+
     private void loadMoviesList() {
+        progressBar.setVisibility(View.VISIBLE);
         apiService = Client.getClient().create(MovieApi.class);
 
-        Call<MoviListResponse> call = apiService.getMoviesFromSearch(access_token,"Титаник");
+        Call<MoviListResponse> call = apiService.getMoviesFromSearch(access_token,"Бойцовский клуб");
         call.enqueue(new Callback<MoviListResponse>() {
             @Override
             public void onResponse(Call<MoviListResponse> call, Response<MoviListResponse> response) {
@@ -66,34 +78,38 @@ public class MovieListFragment extends Fragment {
                         moviesList.addAll(responseItemsList);
                         recyclerView.setAdapter(recyclerViewAdapter);
                         recyclerView.scrollToPosition(moviesList.size() - responseItemsList.size() - 1);
-                        //incrementing current json response page
-                        currentJsonResponsePage++;
                         loading = false;
                     }
+                    progressBar.setVisibility(View.INVISIBLE);
                 } catch (NullPointerException ex) {
                     ex.printStackTrace();
                     recyclerView.setAdapter(recyclerViewAdapter);
                     loading = false;
+                    progressBar.setVisibility(View.INVISIBLE);
                 }
 
             }
 
             @Override
             public void onFailure(Call<MoviListResponse> call, Throwable t) {
+                progressBar.setVisibility(View.INVISIBLE);
                 Toast.makeText(getActivity().getApplicationContext(),"Something wrong", Toast.LENGTH_LONG).show();
             }
         });
     }
 
-    private void initUI() {
-//        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
-//        swipeRefreshLayout.setOnRefreshListener(this);
-        moviesList = new ArrayList<>();
-        filteredMovieList = new ArrayList<>();
-        recyclerViewAdapter = new MovieRecyclerViewAdapter(getContext(), moviesList);
-        filteredViewAdapter = new MovieRecyclerViewAdapter(getContext(), filteredMovieList);
-        recyclerView = view.findViewById(R.id.movies_listview);
-        final LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(mLayoutManager);
+    public static MovieRecyclerViewAdapter getRecyclerViewAdapter() {
+        return recyclerViewAdapter;
+    }
+
+    public static RecyclerView getRecyclerView() {
+        return recyclerView;
+    }
+
+    @Override
+    public void onRefresh() {
+        moviesList.clear();
+        loadMoviesList();
+        swipeRefreshLayout.setRefreshing(false);
     }
 }
