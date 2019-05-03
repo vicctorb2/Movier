@@ -7,11 +7,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -19,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import movier.bsuir.study.movier.R;
 import movier.bsuir.study.movier.adapter.MovieRecyclerViewAdapter;
-import movier.bsuir.study.movier.api.Client;
+import movier.bsuir.study.movier.api.APIClient;
 import movier.bsuir.study.movier.api.MovieApi;
 
 import movier.bsuir.study.movier.model.MoviListResponse;
@@ -28,7 +26,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MovieListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
+public class MovieSearchFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
 
     String access_token = "f43cdf4c9aec6de5430e5fab778e3855";
     View view;
@@ -66,7 +64,7 @@ public class MovieListFragment extends Fragment implements SwipeRefreshLayout.On
 
     private void loadMoviesList() {
         progressBar.setVisibility(View.VISIBLE);
-        apiService = Client.getClient().create(MovieApi.class);
+        apiService = APIClient.getClient().create(MovieApi.class);
 
         Call<MoviListResponse> call = apiService.getMoviesFromSearch(access_token,"Бойцовский клуб");
         call.enqueue(new Callback<MoviListResponse>() {

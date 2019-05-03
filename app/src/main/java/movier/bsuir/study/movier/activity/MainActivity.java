@@ -18,7 +18,7 @@ import java.util.List;
 import movier.bsuir.study.movier.R;
 import movier.bsuir.study.movier.adapter.MovieRecyclerViewAdapter;
 import movier.bsuir.study.movier.adapter.ViewPagerAdapter;
-import movier.bsuir.study.movier.api.Client;
+import movier.bsuir.study.movier.api.APIClient;
 import movier.bsuir.study.movier.api.MovieApi;
 import movier.bsuir.study.movier.model.MoviListResponse;
 import movier.bsuir.study.movier.model.Movie;
@@ -26,9 +26,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static movier.bsuir.study.movier.activity.MovieListFragment.apiService;
-import static movier.bsuir.study.movier.activity.MovieListFragment.recyclerView;
-import static movier.bsuir.study.movier.activity.MovieListFragment.recyclerViewAdapter;
+import static movier.bsuir.study.movier.activity.MovieSearchFragment.apiService;
+import static movier.bsuir.study.movier.activity.MovieSearchFragment.recyclerView;
+import static movier.bsuir.study.movier.activity.MovieSearchFragment.recyclerViewAdapter;
 
 public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
@@ -37,7 +37,8 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     private ViewPager viewPager;
     private Toolbar toolbar;
     public SearchView searchView;
-    MovieListFragment movieListFragment;
+    ViewPagerAdapter adapter;
+    MovieSearchFragment movieSearchFragment;
 
     List<Movie> fromSearchMovieList;
     static MovieRecyclerViewAdapter fromSearchAdapter;
@@ -49,9 +50,9 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         toolbar = findViewById(R.id.toolbar);
         tabLayout = findViewById(R.id.tablayout_id);
         viewPager = findViewById(R.id.viewpager_id);
-        movieListFragment = new MovieListFragment();
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(movieListFragment, "Search");
+        movieSearchFragment = new MovieSearchFragment();
+        adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(movieSearchFragment, "Search");
         adapter.addFragment(new Fragment(),"Popular");
         adapter.addFragment(new Fragment(),"For you");
         fromSearchMovieList = new ArrayList<>();
@@ -82,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
             recyclerView.setAdapter(recyclerViewAdapter);
             return false;
         } else {
-            apiService = Client.getClient().create(MovieApi.class);
+            apiService = APIClient.getClient().create(MovieApi.class);
             Call<MoviListResponse> call = apiService.getMoviesFromSearch(access_token, newText);
             call.enqueue(new Callback<MoviListResponse>() {
                 @Override

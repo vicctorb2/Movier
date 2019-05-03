@@ -6,7 +6,7 @@ import com.google.gson.GsonBuilder;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class Client {
+public class APIClient {
 
     private static final String BASE_API_URL = "https://api.themoviedb.org/";
 
