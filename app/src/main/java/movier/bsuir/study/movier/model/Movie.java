@@ -3,8 +3,14 @@ package movier.bsuir.study.movier.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Movie {
+import java.io.Serializable;
+import java.util.List;
 
+public class Movie implements Serializable {
+
+
+    private String originalImageURL = "https://image.tmdb.org/t/p/original";
+    private String tinyImageURL = "https://image.tmdb.org/t/p/w92";
     @SerializedName("id")
     @Expose
     private int id;
@@ -21,7 +27,10 @@ public class Movie {
     @Expose
     private String overview;
 
-    private String genre = "Жанр";
+    @SerializedName("genre_ids")
+    @Expose
+    private List<Integer> genre_id_list;
+
     private String kinopoiskRating = "5.5";
     private String imdbRating = "5.5";
 
@@ -29,11 +38,22 @@ public class Movie {
     @Expose
     private String posterImgUrl;
 
+    @SerializedName("release_date")
+    @Expose
+    private String release_date;
 
-    private int year = 2019;
+    @SerializedName("budget")
+    @Expose
+    private int budget;
+
+
 
     public int getId() {
         return id;
+    }
+
+    public int getBudget() {
+        return budget;
     }
 
     public void setId(int id) {
@@ -43,16 +63,14 @@ public class Movie {
     public Movie() {
     }
 
-    public Movie(int id, String title, String rating, String overview, String genre, String kinopoiskRating, String imdbRating, String posterImgUrl, int year) {
+    public Movie(int id, String title, String rating, String overview, String kinopoiskRating, String imdbRating, String posterImgUrl) {
         this.id = id;
         this.title = title;
         this.rating = rating;
         this.overview = overview;
-        this.genre = genre;
         this.kinopoiskRating = kinopoiskRating;
         this.imdbRating = imdbRating;
         this.posterImgUrl = posterImgUrl;
-        this.year = year;
     }
 
     public String getTitle() {
@@ -80,11 +98,7 @@ public class Movie {
     }
 
     public String getGenre() {
-        return genre;
-    }
-
-    public void setGenre(String genre) {
-        this.genre = genre;
+        return Genres.getGenre(genre_id_list);
     }
 
     public String getKinopoiskRating() {
@@ -103,19 +117,22 @@ public class Movie {
         this.imdbRating = imdbRating;
     }
 
-    public String getPosterImgUrl() {
-        return "https://image.tmdb.org/t/p/original" + posterImgUrl;
+    public String getPosterImgUrl(String type) {
+        switch (type) {
+            case "tiny":
+                return tinyImageURL + posterImgUrl;
+            case "original":
+                return originalImageURL + posterImgUrl;
+            default:
+                return originalImageURL + posterImgUrl;
+        }
     }
 
     public void setPosterImgUrl(String posterImgUrl) {
         this.posterImgUrl = posterImgUrl;
     }
 
-    public int getYear() {
-        return year;
-    }
-
-    public void setYear(int year) {
-        this.year = year;
+    public String getYear() {
+        return release_date.split("-")[0];
     }
 }
