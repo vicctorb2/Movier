@@ -10,4 +10,6 @@ public interface MovieApi {
     @GET("3/search/movie")
     Call<MoviListResponse> getMoviesFromSearch(@Query("api_key") String access_token, @Query("query") String query);
 
+    @GET("3/movie/popular")
+    Call<MoviListResponse> getPopularMovies(@Query("api_key") String access_token, @Query("language") String language, @Query("page") String page);
 }

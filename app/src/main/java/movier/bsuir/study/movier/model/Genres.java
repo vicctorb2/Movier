@@ -26,7 +26,9 @@ public class Genres {
 
     public static String getGenre(List<Integer> genreIdList) {
         String result = "";
-
+        if (genreIdList.size()>=5){
+            genreIdList = genreIdList.subList(0,4);
+        }
         for (Integer genreId : genreIdList) {
             switch (genreId) {
                 case 28:

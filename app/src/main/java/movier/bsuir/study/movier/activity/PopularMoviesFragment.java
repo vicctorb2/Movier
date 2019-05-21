@@ -15,30 +15,31 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import movier.bsuir.study.movier.R;
 import movier.bsuir.study.movier.adapter.MovieRecyclerViewAdapter;
 import movier.bsuir.study.movier.api.APIClient;
 import movier.bsuir.study.movier.api.MovieApi;
-
 import movier.bsuir.study.movier.model.MoviListResponse;
 import movier.bsuir.study.movier.model.Movie;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MovieSearchFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
+public class PopularMoviesFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
-    String access_token = "f43cdf4c9aec6de5430e5fab778e3855";
-    View view;
+    final String access_token = "f43cdf4c9aec6de5430e5fab778e3855";
+    final String language = "ru-RU";
+
 
     protected static RecyclerView recyclerView;
     SwipeRefreshLayout swipeRefreshLayout;
     public static List<Movie> moviesList;
-    protected static List<Movie> filteredMovieList;
     static MovieApi apiService;
     static MovieRecyclerViewAdapter recyclerViewAdapter;
     static boolean loading;
     ProgressBar progressBar;
+    View view;
 
     @Nullable
     @Override
@@ -46,7 +47,7 @@ public class MovieSearchFragment extends Fragment implements SwipeRefreshLayout.
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         view = inflater.inflate(R.layout.activity_movie_list, container, false);
         init();
-        loadMoviesList();
+        loadPopularMovieList();
         return view;
     }
 
@@ -55,18 +56,17 @@ public class MovieSearchFragment extends Fragment implements SwipeRefreshLayout.
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(this);
         moviesList = new ArrayList<>();
-        filteredMovieList = new ArrayList<>();
         recyclerViewAdapter = new MovieRecyclerViewAdapter(getContext(), moviesList);
         recyclerView = view.findViewById(R.id.movies_listview);
         final LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLayoutManager);
     }
 
-    private void loadMoviesList() {
+    private void loadPopularMovieList() {
         progressBar.setVisibility(View.VISIBLE);
         apiService = APIClient.getClient().create(MovieApi.class);
 
-        Call<MoviListResponse> call = apiService.getMoviesFromSearch(access_token,"");
+        Call<MoviListResponse> call = apiService.getPopularMovies(access_token,language,"1");
         call.enqueue(new Callback<MoviListResponse>() {
             @Override
             public void onResponse(Call<MoviListResponse> call, Response<MoviListResponse> response) {
@@ -96,18 +96,10 @@ public class MovieSearchFragment extends Fragment implements SwipeRefreshLayout.
         });
     }
 
-    public static MovieRecyclerViewAdapter getRecyclerViewAdapter() {
-        return recyclerViewAdapter;
-    }
-
-    public static RecyclerView getRecyclerView() {
-        return recyclerView;
-    }
-
     @Override
     public void onRefresh() {
         moviesList.clear();
-        loadMoviesList();
+        loadPopularMovieList();
         swipeRefreshLayout.setRefreshing(false);
     }
 }

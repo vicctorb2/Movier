@@ -37,8 +37,9 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     private ViewPager viewPager;
     private Toolbar toolbar;
     public SearchView searchView;
-    ViewPagerAdapter adapter;
+    ViewPagerAdapter viewPagerAdapter;
     MovieSearchFragment movieSearchFragment;
+    PopularMoviesFragment popularMoviesFragment;
 
     List<Movie> fromSearchMovieList;
     static MovieRecyclerViewAdapter fromSearchAdapter;
@@ -51,13 +52,15 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         tabLayout = findViewById(R.id.tablayout_id);
         viewPager = findViewById(R.id.viewpager_id);
         movieSearchFragment = new MovieSearchFragment();
-        adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(movieSearchFragment, "Search");
-        adapter.addFragment(new Fragment(),"Popular");
-        adapter.addFragment(new Fragment(),"For you");
+        popularMoviesFragment = new PopularMoviesFragment();
+        viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+        viewPagerAdapter.addFragment(movieSearchFragment, "Search");
+        viewPagerAdapter.addFragment(popularMoviesFragment,"Popular");
+        viewPagerAdapter.addFragment(new Fragment(),"For you");
         fromSearchMovieList = new ArrayList<>();
         fromSearchAdapter = new MovieRecyclerViewAdapter(getApplicationContext(), fromSearchMovieList);
-        viewPager.setAdapter(adapter);
+        viewPager.setAdapter(viewPagerAdapter);
+        viewPager.setCurrentItem(1);
         tabLayout.setupWithViewPager(viewPager);
         setSupportActionBar(toolbar);
     }
