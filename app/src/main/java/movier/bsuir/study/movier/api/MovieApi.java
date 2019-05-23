@@ -47,5 +47,7 @@ public interface MovieApi {
     @GET("3/account/{account_id}/favorite/movies")
     Call<MoviListResponse> getFavoriteMovies(@Path("account_id") int account_id, @Query("api_key") String access_token, @Query("session_id") String session_id, @Query("language") String language);
 
+    @GET("3/movie/{movie_id}/similar")
+    Call<MoviListResponse> getSimilarMovies(@Path("movie_id") int movie_id, @Query("api_key") String access_token, @Query("language") String language);
 
 }

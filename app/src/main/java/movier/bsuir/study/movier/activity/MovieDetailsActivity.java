@@ -1,4 +1,5 @@
 package movier.bsuir.study.movier.activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,19 +12,25 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import movier.bsuir.study.movier.R;
+import movier.bsuir.study.movier.adapter.MovieRecyclerViewAdapter;
+import movier.bsuir.study.movier.adapter.SimilarMoviesRecyclerViewAdapter;
 import movier.bsuir.study.movier.api.APIClient;
 import movier.bsuir.study.movier.api.MovieApi;
 import movier.bsuir.study.movier.model.ClassicResponse;
 import movier.bsuir.study.movier.model.MarkAsFavoriteBody;
+import movier.bsuir.study.movier.model.MoviListResponse;
 import movier.bsuir.study.movier.model.Movie;
 import movier.bsuir.study.movier.model.Video;
 import movier.bsuir.study.movier.model.VideoResponse;
@@ -47,7 +54,9 @@ public class MovieDetailsActivity extends AppCompatActivity {
     MovieApi apiService;
 
     YouTubePlayerView youTubePlayerView;
-
+    List<Movie> similarMoviesList;
+    SimilarMoviesRecyclerViewAdapter similarAdapter;
+    RecyclerView recyclerView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,6 +70,13 @@ public class MovieDetailsActivity extends AppCompatActivity {
         movie = (Movie) getIntent().getSerializableExtra("movie");
         userId = getIntent().getIntExtra("user_id", 0);
         posterView = findViewById(R.id.movie_poster_imageview);
+        recyclerView = findViewById(R.id.similarMoviesRecyclerId);
+        similarMoviesList = new ArrayList<>();
+        similarAdapter = new SimilarMoviesRecyclerViewAdapter(getApplicationContext(), similarMoviesList);
+        final LinearLayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        mLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setAdapter(similarAdapter);
         Picasso.with(getApplicationContext()).load(movie.getPosterImgUrl("large")).placeholder(R.drawable.poster).into(posterView);
         titleTV = findViewById(R.id.movie_title_tv);
         yearTV = findViewById(R.id.movie_year_tv);
@@ -68,14 +84,13 @@ public class MovieDetailsActivity extends AppCompatActivity {
         imdbTV = findViewById(R.id.movie_imdb_tv);
         overviewTV = findViewById(R.id.movie_overview_tv);
         likeButton = findViewById(R.id.movie_like_button);
-        loadTrailers();
-
         overviewTV.setText(movie.getOverview());
         genreTV.setText("Жанр: " + movie.getGenre());
         imdbTV.setText("Рейтинг: " + movie.getRating());
         yearTV.setText("Год выпуска: " + movie.getYear());
         titleTV.setText(movie.getTitle());
-
+        loadTrailers();
+        loadSimilarMovies();
         likeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -100,6 +115,34 @@ public class MovieDetailsActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void loadSimilarMovies() {
+        apiService = APIClient.getClient().create(MovieApi.class);
+
+        Call<MoviListResponse> call = apiService.getSimilarMovies(movie.getId(),MainActivity.getAccess_token(),"ru-RU");
+        call.enqueue(new Callback<MoviListResponse>() {
+            @Override
+            public void onResponse(Call<MoviListResponse> call, Response<MoviListResponse> response) {
+                try {
+                    if (response.isSuccessful() && response.code() != 403) {
+                        List<Movie> responseItemsList = new ArrayList<>(response.body().getMovieList());
+                        similarMoviesList.addAll(responseItemsList);
+                        recyclerView.setAdapter(similarAdapter);
+                        recyclerView.scrollToPosition(similarMoviesList.size() - responseItemsList.size() - 1);
+                    }
+                } catch (NullPointerException ex) {
+                    ex.printStackTrace();
+                    recyclerView.setAdapter(similarAdapter);
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<MoviListResponse> call, Throwable t) {
+                Toast.makeText(getApplicationContext(),"Something wrong", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     private void markAsFavorite() {

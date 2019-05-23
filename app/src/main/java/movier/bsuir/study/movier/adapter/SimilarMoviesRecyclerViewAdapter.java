@@ -15,14 +15,14 @@ import java.util.List;
 
 import movier.bsuir.study.movier.R;
 import movier.bsuir.study.movier.activity.MovieDetailsActivity;
-import movier.bsuir.study.movier.adapter.holder.MovieHolder;
+import movier.bsuir.study.movier.adapter.holder.MovieCardHolder;
 import movier.bsuir.study.movier.model.Movie;
 
-public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<MovieHolder>{
+public class SimilarMoviesRecyclerViewAdapter extends RecyclerView.Adapter<MovieCardHolder>{
     private Context mContext;
     private List<Movie> moviesList;
 
-    public MovieRecyclerViewAdapter(Context mContext, List<Movie> listData) {
+    public SimilarMoviesRecyclerViewAdapter(Context mContext, List<Movie> listData) {
         if (listData == null) {
             listData.add(new Movie());
             this.mContext = mContext;
@@ -34,24 +34,21 @@ public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<MovieHolder>{
 
     @NonNull
     @Override
-    public MovieHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public MovieCardHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
-        view = LayoutInflater.from(mContext).inflate(R.layout.item_movie, parent, false);
-        return new MovieHolder(view);
+        view = LayoutInflater.from(mContext).inflate(R.layout.similar_movie_item, parent, false);
+        return new MovieCardHolder(view);
     }
 
     @Override
     public int getItemViewType(int position) {
-        return R.layout.item_movie;
+        return R.layout.similar_movie_item;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MovieHolder movieHolder, final int position) {
-        Picasso.with(mContext).load(moviesList.get(position).getPosterImgUrl("tiny")).placeholder(R.drawable.poster).into(movieHolder.itemMoviePosterImageView);
-        movieHolder.itemMovieTitleTv.setText(moviesList.get(position).getTitle());
-        movieHolder.itemMovieGenreTv.setText(moviesList.get(position).getGenre());
-        movieHolder.itemMovieRatingTv.setText(moviesList.get(position).getRating());
-        movieHolder.itemMovieYearTv.setText(moviesList.get(position).getYear());
+    public void onBindViewHolder(@NonNull MovieCardHolder movieHolder, final int position) {
+        Picasso.with(mContext).load(moviesList.get(position).getPosterImgUrl("large")).placeholder(R.drawable.poster).into(movieHolder.poster);
+        movieHolder.title.setText(moviesList.get(position).getTitle());
         View.OnClickListener onClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
