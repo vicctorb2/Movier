@@ -10,6 +10,7 @@ public class Movie implements Serializable {
 
 
     private String originalImageURL = "https://image.tmdb.org/t/p/original";
+    private String largeImageURL = "https://image.tmdb.org/t/p/w500";
     private String tinyImageURL = "https://image.tmdb.org/t/p/w92";
     @SerializedName("id")
     @Expose
@@ -45,7 +46,6 @@ public class Movie implements Serializable {
     @SerializedName("budget")
     @Expose
     private int budget;
-
 
 
     public int getId() {
@@ -90,6 +90,9 @@ public class Movie implements Serializable {
     }
 
     public String getOverview() {
+        if (overview.equals("") || overview == null) {
+            return "Пока нет описания к этому фильму.";
+        }
         return overview;
     }
 
@@ -123,6 +126,8 @@ public class Movie implements Serializable {
                 return tinyImageURL + posterImgUrl;
             case "original":
                 return originalImageURL + posterImgUrl;
+            case "large":
+                return largeImageURL + posterImgUrl;
             default:
                 return originalImageURL + posterImgUrl;
         }

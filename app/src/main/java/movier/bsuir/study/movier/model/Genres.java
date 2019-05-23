@@ -2,7 +2,7 @@ package movier.bsuir.study.movier.model;
 
 import java.util.List;
 
-public class Genres {
+class Genres {
     private static final String action = "Боевик";
     private static final String adventure = "Приключения";
     private static final String cartoon = "Мультфильм";

@@ -2,26 +2,29 @@ package movier.bsuir.study.movier.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 import movier.bsuir.study.movier.R;
+import movier.bsuir.study.movier.activity.MainActivity;
 import movier.bsuir.study.movier.activity.MovieDetailsActivity;
 import movier.bsuir.study.movier.adapter.holder.MovieHolder;
 import movier.bsuir.study.movier.model.Movie;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<MovieHolder>{
     private Context mContext;
     private List<Movie> moviesList;
-    Movie movieForDetailView;
 
     public MovieRecyclerViewAdapter(Context mContext, List<Movie> listData) {
         if (listData == null) {

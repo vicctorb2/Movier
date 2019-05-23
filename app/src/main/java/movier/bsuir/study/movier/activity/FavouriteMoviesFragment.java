@@ -1,17 +1,18 @@
 package movier.bsuir.study.movier.activity;
 
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,8 +27,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class PopularMoviesFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
-
+public class FavouriteMoviesFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     final String access_token = "f43cdf4c9aec6de5430e5fab778e3855";
     final String language = "ru-RU";
 
@@ -47,7 +47,7 @@ public class PopularMoviesFragment extends Fragment implements SwipeRefreshLayou
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         view = inflater.inflate(R.layout.activity_movie_list, container, false);
         init();
-        loadPopularMovieList();
+        loadFavoriteMoviesList();
         return view;
     }
 
@@ -62,11 +62,11 @@ public class PopularMoviesFragment extends Fragment implements SwipeRefreshLayou
         recyclerView.setLayoutManager(mLayoutManager);
     }
 
-    private void loadPopularMovieList() {
+    private void loadFavoriteMoviesList() {
         progressBar.setVisibility(View.VISIBLE);
         apiService = APIClient.getClient().create(MovieApi.class);
 
-        Call<MoviListResponse> call = apiService.getPopularMovies(access_token,language,"1");
+        Call<MoviListResponse> call = apiService.getFavoriteMovies(MainActivity.getAccount_id(),access_token,MainActivity.getSession_id(),"ru-RU");
         call.enqueue(new Callback<MoviListResponse>() {
             @Override
             public void onResponse(Call<MoviListResponse> call, Response<MoviListResponse> response) {
@@ -85,7 +85,6 @@ public class PopularMoviesFragment extends Fragment implements SwipeRefreshLayou
                     loading = false;
                     progressBar.setVisibility(View.INVISIBLE);
                 }
-
             }
 
             @Override
@@ -99,7 +98,7 @@ public class PopularMoviesFragment extends Fragment implements SwipeRefreshLayou
     @Override
     public void onRefresh() {
         moviesList.clear();
-        loadPopularMovieList();
+        loadFavoriteMoviesList();
         swipeRefreshLayout.setRefreshing(false);
     }
 }
