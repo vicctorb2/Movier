@@ -2,16 +2,18 @@ package movier.bsuir.study.movier.activity;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import com.google.android.material.tabs.TabLayout;
-import androidx.fragment.app.Fragment;
-import androidx.core.view.MenuItemCompat;
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
-import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.MenuItemCompat;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +25,6 @@ import movier.bsuir.study.movier.api.APIClient;
 import movier.bsuir.study.movier.api.MovieApi;
 import movier.bsuir.study.movier.model.MoviListResponse;
 import movier.bsuir.study.movier.model.Movie;
-import movier.bsuir.study.movier.model.User;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -70,11 +71,10 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         popularMoviesFragment = new PopularMoviesFragment();
         favouriteMoviesFragment = new FavouriteMoviesFragment();
         viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        viewPagerAdapter.addFragment(movieSearchFragment, "Search");
-        viewPagerAdapter.addFragment(popularMoviesFragment,"Popular");
-        viewPagerAdapter.addFragment(favouriteMoviesFragment,"Favorite");
-        viewPagerAdapter.addFragment(new Fragment(),"For you");
-        viewPagerAdapter.addFragment(new Fragment(),"Watchlist");
+        viewPagerAdapter.addFragment(movieSearchFragment, "ПОИСК");
+        viewPagerAdapter.addFragment(popularMoviesFragment,"ПОПУЛЯРНОЕ");
+        viewPagerAdapter.addFragment(favouriteMoviesFragment,"ЛЮБИМОЕ");
+        viewPagerAdapter.addFragment(new Fragment(),"РЕКОМЕНДАЦИИ");
         fromSearchMovieList = new ArrayList<>();
         fromSearchAdapter = new MovieRecyclerViewAdapter(getApplicationContext(), fromSearchMovieList);
         viewPager.setAdapter(viewPagerAdapter);

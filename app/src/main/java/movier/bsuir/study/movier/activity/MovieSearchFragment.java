@@ -28,22 +28,19 @@ import retrofit2.Response;
 
 public class MovieSearchFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
 
-    String access_token = "f43cdf4c9aec6de5430e5fab778e3855";
-    View view;
+    private String access_token = "f43cdf4c9aec6de5430e5fab778e3855";
+    private View view;
 
-    protected static RecyclerView recyclerView;
-    SwipeRefreshLayout swipeRefreshLayout;
-    public static List<Movie> moviesList;
-    protected static List<Movie> filteredMovieList;
-    static MovieApi apiService;
-    static MovieRecyclerViewAdapter recyclerViewAdapter;
-    static boolean loading;
-    ProgressBar progressBar;
+    static RecyclerView recyclerView;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private static List<Movie> moviesList;
+    public static MovieRecyclerViewAdapter recyclerViewAdapter;
+    private ProgressBar progressBar;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable final ViewGroup container, Bundle savedInstanceState) {
-        final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        new LinearLayoutManager(getActivity());
         view = inflater.inflate(R.layout.activity_movie_list, container, false);
         init();
         loadMoviesList();
@@ -55,7 +52,6 @@ public class MovieSearchFragment extends Fragment implements SwipeRefreshLayout.
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(this);
         moviesList = new ArrayList<>();
-        filteredMovieList = new ArrayList<>();
         recyclerViewAdapter = new MovieRecyclerViewAdapter(getContext(), moviesList);
         recyclerView = view.findViewById(R.id.movies_listview);
         final LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
@@ -64,7 +60,7 @@ public class MovieSearchFragment extends Fragment implements SwipeRefreshLayout.
 
     private void loadMoviesList() {
         progressBar.setVisibility(View.VISIBLE);
-        apiService = APIClient.getClient().create(MovieApi.class);
+        MovieApi apiService = APIClient.getClient().create(MovieApi.class);
 
         Call<MoviListResponse> call = apiService.getMoviesFromSearch(access_token,"");
         call.enqueue(new Callback<MoviListResponse>() {
@@ -76,13 +72,11 @@ public class MovieSearchFragment extends Fragment implements SwipeRefreshLayout.
                         moviesList.addAll(responseItemsList);
                         recyclerView.setAdapter(recyclerViewAdapter);
                         recyclerView.scrollToPosition(moviesList.size() - responseItemsList.size() - 1);
-                        loading = false;
                     }
                     progressBar.setVisibility(View.INVISIBLE);
                 } catch (NullPointerException ex) {
                     ex.printStackTrace();
                     recyclerView.setAdapter(recyclerViewAdapter);
-                    loading = false;
                     progressBar.setVisibility(View.INVISIBLE);
                 }
 
@@ -94,14 +88,6 @@ public class MovieSearchFragment extends Fragment implements SwipeRefreshLayout.
                 Toast.makeText(getActivity().getApplicationContext(),"Something wrong", Toast.LENGTH_LONG).show();
             }
         });
-    }
-
-    public static MovieRecyclerViewAdapter getRecyclerViewAdapter() {
-        return recyclerViewAdapter;
-    }
-
-    public static RecyclerView getRecyclerView() {
-        return recyclerView;
     }
 
     @Override

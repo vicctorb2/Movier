@@ -1,5 +1,4 @@
 package movier.bsuir.study.movier.activity;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import movier.bsuir.study.movier.R;
-import movier.bsuir.study.movier.adapter.MovieRecyclerViewAdapter;
 import movier.bsuir.study.movier.adapter.SimilarMoviesRecyclerViewAdapter;
 import movier.bsuir.study.movier.api.APIClient;
 import movier.bsuir.study.movier.api.MovieApi;

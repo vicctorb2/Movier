@@ -1,22 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="154dp"
-    android:layout_height="278dp"
+    android:layout_width="157dp"
+    android:layout_height="274dp"
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_width="149dp"
+        android:layout_height="264dp"
+        android:layout_gravity="center">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
 
             <ImageView
                 android:id="@+id/similar_movie_poster"
-                android:layout_width="138dp"
-                android:layout_height="204dp"
+                android:layout_width="132dp"
+                android:layout_height="199dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
@@ -28,15 +30,17 @@
 
             <TextView
                 android:id="@+id/similar_movie_title"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_width="0dp"
+                android:layout_height="47dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
-                android:text="Бойцовский клуб"
+                android:layout_marginBottom="8dp"
+                android:text="Полярный"
                 android:textAlignment="center"
                 android:textColor="@color/colorPrimaryDark"
                 android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/similar_movie_poster" />

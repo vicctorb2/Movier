@@ -28,23 +28,21 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class FavouriteMoviesFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
-    final String access_token = "f43cdf4c9aec6de5430e5fab778e3855";
-    final String language = "ru-RU";
+    private final String access_token = "f43cdf4c9aec6de5430e5fab778e3855";
+    private final String language = "ru-RU";
 
 
-    protected static RecyclerView recyclerView;
-    SwipeRefreshLayout swipeRefreshLayout;
-    public static List<Movie> moviesList;
-    static MovieApi apiService;
-    static MovieRecyclerViewAdapter recyclerViewAdapter;
-    static boolean loading;
-    ProgressBar progressBar;
-    View view;
+    private static RecyclerView recyclerView;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private static List<Movie> moviesList;
+    private MovieRecyclerViewAdapter recyclerViewAdapter;
+    private ProgressBar progressBar;
+    private View view;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable final ViewGroup container, Bundle savedInstanceState) {
-        final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+//        new LinearLayoutManager(getActivity());
         view = inflater.inflate(R.layout.activity_movie_list, container, false);
         init();
         loadFavoriteMoviesList();
@@ -64,9 +62,9 @@ public class FavouriteMoviesFragment extends Fragment implements SwipeRefreshLay
 
     private void loadFavoriteMoviesList() {
         progressBar.setVisibility(View.VISIBLE);
-        apiService = APIClient.getClient().create(MovieApi.class);
+        MovieApi apiService = APIClient.getClient().create(MovieApi.class);
 
-        Call<MoviListResponse> call = apiService.getFavoriteMovies(MainActivity.getAccount_id(),access_token,MainActivity.getSession_id(),"ru-RU");
+        Call<MoviListResponse> call = apiService.getFavoriteMovies(MainActivity.getAccount_id(),access_token,MainActivity.getSession_id(),language);
         call.enqueue(new Callback<MoviListResponse>() {
             @Override
             public void onResponse(Call<MoviListResponse> call, Response<MoviListResponse> response) {
@@ -76,14 +74,12 @@ public class FavouriteMoviesFragment extends Fragment implements SwipeRefreshLay
                         moviesList.addAll(responseItemsList);
                         recyclerView.setAdapter(recyclerViewAdapter);
                         recyclerView.scrollToPosition(moviesList.size() - responseItemsList.size() - 1);
-                        loading = false;
                     }
                     progressBar.setVisibility(View.INVISIBLE);
                 } catch (NullPointerException ex) {
                     ex.printStackTrace();
                     recyclerView.setAdapter(recyclerViewAdapter);
-                    loading = false;
-                    progressBar.setVisibility(View.INVISIBLE);
+                                        progressBar.setVisibility(View.INVISIBLE);
                 }
             }
 
@@ -101,4 +97,5 @@ public class FavouriteMoviesFragment extends Fragment implements SwipeRefreshLay
         loadFavoriteMoviesList();
         swipeRefreshLayout.setRefreshing(false);
     }
+
 }
